@@ -1,0 +1,71 @@
+# Profils d'execution. Les valeurs ${VAR} sont lues dans l'environnement (.env).
+# Choix du profil : DEVICE_PROFILE=android_real pytest  (ou --device android_real)
+
+defaults:
+  implicit_wait: 0          # on n'utilise que des attentes explicites
+  explicit_wait: 15
+  new_command_timeout: 240
+
+profiles:
+
+  android_real:
+    platformName: Android
+    appium:automationName: UiAutomator2
+    appium:udid: ${ANDROID_UDID}
+    appium:app: ./apps/mda-2.3.0-27.apk
+    appium:appPackage: com.saucelabs.mydemoapp.android
+    appium:appActivity: .view.activities.SplashActivity
+    appium:appWaitActivity: "*"
+    appium:autoGrantPermissions: false   # on veut tester les popups de permissions
+    appium:noReset: false
+    appium:fullReset: false
+    appium:disableWindowAnimation: true
+
+  # Emulateur deja demarre (CI) : Appium prend le seul device connecte
+  android_ci:
+    platformName: Android
+    appium:automationName: UiAutomator2
+    appium:app: ./apps/mda-2.3.0-27.apk
+    appium:appPackage: com.saucelabs.mydemoapp.android
+    appium:appActivity: .view.activities.SplashActivity
+    appium:appWaitActivity: "*"
+    appium:autoGrantPermissions: false
+    appium:disableWindowAnimation: true
+    appium:uiautomator2ServerInstallTimeout: 120000
+
+  # Emulateur lance par Appium a partir de son nom d'AVD
+  android_emulator:
+    platformName: Android
+    appium:automationName: UiAutomator2
+    appium:avd: ${ANDROID_AVD}
+    appium:app: ./apps/mda-2.3.0-27.apk
+    appium:appPackage: com.saucelabs.mydemoapp.android
+    appium:appActivity: .view.activities.SplashActivity
+    appium:appWaitActivity: "*"
+    appium:autoGrantPermissions: false
+    appium:avdLaunchTimeout: 180000
+    appium:disableWindowAnimation: true
+
+  # iPhone physique : l'app doit etre compilee et installee depuis Xcode avec ton
+  # propre Team ID (voir docs/SETUP_IOS.md). On la cible donc par bundleId.
+  ios_real:
+    platformName: iOS
+    appium:automationName: XCUITest
+    appium:udid: ${IOS_UDID}
+    appium:bundleId: ${IOS_BUNDLE_ID}
+    appium:xcodeOrgId: ${XCODE_ORG_ID}
+    appium:xcodeSigningId: ${XCODE_SIGNING_ID}
+    appium:updatedWDABundleId: ${WDA_BUNDLE_ID}
+    appium:autoAcceptAlerts: false
+    appium:noReset: false
+    appium:showXcodeLog: false
+    appium:wdaLaunchTimeout: 120000
+
+  ios_simulator:
+    platformName: iOS
+    appium:automationName: XCUITest
+    appium:deviceName: ${IOS_SIM_NAME}
+    appium:platformVersion: ${IOS_SIM_VERSION}
+    appium:app: ./apps/SauceLabs-Demo-App.Simulator.zip
+    appium:autoAcceptAlerts: false
+    appium:wdaLaunchTimeout: 120000

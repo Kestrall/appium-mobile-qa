@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.venv/
+.env
+reports/
+apps/*.apk
+apps/*.ipa
+apps/*.app
+apps/*.zip
+.pytest_cache/
+appium.log
